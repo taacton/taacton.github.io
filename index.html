@@ -61,7 +61,7 @@
             function contactApple(){
                 var id = document.getElementById("id").value;
                 console.log(id);
-                fetch("http://itunes.apple.com/lookup?id=" + id)
+                fetch("https://itunes.apple.com/lookup?id=" + id)
                     .then(function(response) {
                         document.getElementsByClassName("response")[0].style.display="block";
                         return response.json();
