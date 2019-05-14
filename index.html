@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+
+        <nav>
+            <div class="nav-wrapper" style="background-color: #26a69a;">
+                <a href="#!" class="brand-logo" style="margin-left: 10px;">Tom's Toolbox</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="index.html">...</a></li>
+                    <li><a href="index.html">...</a></li>
+                    <li class="active"><a href="index.html">App ID converter</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="container" style="margin: 20px;">
+            <div class="row">
+                <div class="col s6">
+                    <div class="row">
+                        <label>
+                            <input name="os" type="radio" checked />
+                            <span>iOS</span>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            <input name="os" type="radio" disabled=true />
+                            <span>Android</span>
+                        </label>
+                    </div> 
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <i class="material-icons prefix">dialpad</i>
+                            <input id="id" type="number" class="validate">
+                            <label for="id">App ID</label>
+                            <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid Input"></span>
+                            <br>
+                            <button class="btn waves-effect waves-light" style="float: right;" onclick="contactApple()">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s6 response" style="display: none;">
+                    <div class="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                    <pre language="javascript" style="white-space: pre-line;">
+                        <code>Waiting for API response, if this takes too long it probably wasn't a valid ID...</code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function contactApple(){
+                var id = document.getElementById("id").value;
+                console.log(id);
+                fetch("http://itunes.apple.com/lookup?id=" + id)
+                    .then(function(response) {
+                        document.getElementsByClassName("response")[0].style.display="block";
+                        return response.json();
+                    }).then(function(myJson) {
+                        console.log(myJson.results);
+                        var publisherName = myJson.results[0].artistName
+                         , appName = myJson.results[0].trackName
+                         , appId = id
+                         , bundleId = myJson.results[0].bundleId
+                         , genre = myJson.results[0].primaryGenreName;
+                        var output = `Publisher Name: \"${publisherName}\"
+                        App Name: \"${appName}\"
+                        App ID: \"${appId}\"
+                        Bundle ID: \"${bundleId}\"
+                        Genre: \"${genre}\"`;
+                        document.getElementsByTagName("code")[0].innerHTML = output;
+                        document.getElementsByClassName("indeterminate")[0].className = "determinate";
+                        document.getElementsByClassName("determinate")[0].style.width = "100%";
+                    });
+            }
+        </script>
+        
+    </body>
+</html>
