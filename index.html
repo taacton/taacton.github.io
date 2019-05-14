@@ -3,6 +3,7 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
@@ -46,12 +47,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col s6 response" style="display: none;">
+                <div class="col s6 response">
                     <div class="progress">
-                        <div class="indeterminate"></div>
+                        <div class="determinate" style="width: 0%;"></div>
                     </div>
                     <pre language="javascript" style="white-space: pre-line;">
-                        <code>Waiting for API response, if this takes too long it probably wasn't a valid ID...</code>
+                        <code>Waiting for ID input...</code>
                     </pre>
                 </div>
             </div>
@@ -59,28 +60,27 @@
 
         <script>
             function contactApple(){
+                try{
+                    document.getElementsByClassName("determinate")[0].className = "indeterminate";
+                } catch(e) {}
+                document.getElementsByTagName("code")[0].innerHTML = "Waiting for API response, if this takes too long it probably wasn't a valid ID...";
                 var id = document.getElementById("id").value;
-                console.log(id);
-                fetch("https://itunes.apple.com/lookup?id=" + id, {mode: "no-cors"})
-                    .then(function(response) {
-                        document.getElementsByClassName("response")[0].style.display="block";
-                        return response.json();
-                    }).then(function(myJson) {
-                        console.log(myJson.results);
-                        var publisherName = myJson.results[0].artistName
-                         , appName = myJson.results[0].trackName
-                         , appId = id
-                         , bundleId = myJson.results[0].bundleId
-                         , genre = myJson.results[0].primaryGenreName;
-                        var output = `Publisher Name: \"${publisherName}\"
-                        App Name: \"${appName}\"
-                        App ID: \"${appId}\"
-                        Bundle ID: \"${bundleId}\"
-                        Genre: \"${genre}\"`;
-                        document.getElementsByTagName("code")[0].innerHTML = output;
-                        document.getElementsByClassName("indeterminate")[0].className = "determinate";
-                        document.getElementsByClassName("determinate")[0].style.width = "100%";
-                    });
+                $.getJSON("https://itunes.apple.com/lookup?id=" + id + "&callback=?", function(resp){
+                    console.log(resp.results);
+                    var publisherName = resp.results[0].artistName
+                     , appName = resp.results[0].trackName
+                     , appId = id
+                     , bundleId = resp.results[0].bundleId
+                     , genre = resp.results[0].primaryGenreName;
+                    var output = `Publisher Name: \"${publisherName}\"
+                    App Name: \"${appName}\"
+                    App ID: \"${appId}\"
+                    Bundle ID: \"${bundleId}\"
+                    Genre: \"${genre}\"`;
+                    document.getElementsByTagName("code")[0].innerHTML = output;
+                    document.getElementsByClassName("indeterminate")[0].className = "determinate";
+                    document.getElementsByClassName("determinate")[0].style.width = "100%";
+                });
             }
         </script>
         
