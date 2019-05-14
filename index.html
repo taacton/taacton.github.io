@@ -41,10 +41,10 @@
                         </label>
                     </div> 
                     <div class="row">
-                        <div class="input-field col s6">
+                        <div class="input-field col s10">
                             <i class="material-icons prefix">dialpad</i>
-                            <input id="id" type="number" class="validate">
-                            <label for="id">App ID</label>
+                            <input id="id" type="text" pattern="^[0-9 _ ,]*$" class="validate">
+                            <label for="id">App ID(s)</label>
                             <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid Input"></span>
                             <br>
                             <button class="btn waves-effect waves-light" style="float: right;" onclick="contactApple()">Submit
@@ -67,29 +67,35 @@
 
         <script>
             function contactApple(){
+                var id = document.getElementById("id").value;
+                id = id.replace(/\s/g, "");
+                var code = document.getElementsByTagName("code")[0];
                 try{
                     document.getElementsByClassName("determinate")[0].className = "indeterminate";
                 } catch(e) {}
-                document.getElementsByTagName("code")[0].innerHTML = "Waiting for API response, if this takes too long it probably wasn't a valid ID...";
-                var id = document.getElementById("id").value;
+                code.innerHTML = "Waiting for API response, if this takes too long it probably wasn't a valid ID...";
                 $.getJSON("https://itunes.apple.com/lookup?id=" + id + "&callback=?", function(resp){
+                    code.innerHTML = "";
                     console.log(resp.results);
-                    var publisherName = resp.results[0].artistName
-                     , appName = resp.results[0].trackName
-                     , appId = id
-                     , bundleId = resp.results[0].bundleId
-                     , genre = resp.results[0].primaryGenreName;
-                    var output = `Publisher Name: \"${publisherName}\"
-                    App Name: \"${appName}\"
-                    App ID: \"${appId}\"
-                    Bundle ID: \"${bundleId}\"
-                    Genre: \"${genre}\"`;
-                    document.getElementsByTagName("code")[0].innerHTML = output;
+                    resp.results.forEach(function(r){
+                        var publisherName = r.artistName
+                         , appName = r.trackName
+                         , appId = r.trackId
+                         , bundleId = r.bundleId
+                         , genre = r.primaryGenreName;
+                        var output = `Publisher Name: \"${publisherName}\"
+                        App Name: \"${appName}\"
+                        App ID: \"${appId}\"
+                        Bundle ID: \"${bundleId}\"
+                        Genre: \"${genre}\"
+
+                        `;
+                        code.innerHTML += output;
+                    });
                     document.getElementsByClassName("indeterminate")[0].className = "determinate";
                     document.getElementsByClassName("determinate")[0].style.width = "100%";
                 });
             }
         </script>
-        
     </body>
 </html>
