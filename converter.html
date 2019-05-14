@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <title>Toolbox</title>
+        <link rel="icon" href="favicon.ico" type="image/gif" sizes="64x64">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+
+        <nav>
+            <div class="nav-wrapper" style="background-color: #26a69a;">
+                <a href="index.html" class="brand-logo" style="margin-left: 10px;">Tom's Toolbox</a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="index.html">...</a></li>
+                    <li><a href="list.html">List validator</a></li>
+                    <li class="active"><a href="converter.html">App ID converter</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="container" style="margin: 20px;">
+            <div class="row">
+                <div class="col s6">
+                    <div class="row">
+                        <label>
+                            <input name="os" type="radio" checked />
+                            <span>iOS</span>
+                        </label>
+                    </div>
+                    <div class="row">
+                        <label>
+                            <input name="os" type="radio" disabled=true />
+                            <span>Android</span>
+                        </label>
+                    </div> 
+                    <div class="row">
+                        <div id="id-wrapper" class="input-field col s10">
+                            <i class="material-icons prefix">dialpad</i>
+                            <input id="app-id" type="text" pattern="^[0-9 _ ,]*$" class="validate">
+                            <label for="app-id">App ID(s)</label>
+                            <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid Input"></span>
+                            <br>
+                            <button class="btn waves-effect waves-light" style="float: right;" onclick="AppId()">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s1 vl"></div>
+                <div class="col s5 response">
+                    <div class="progress">
+                        <div class="determinate" style="width: 0%;"></div>
+                    </div>
+                    <pre language="javascript" style="white-space: pre-line;">
+                        <code>Waiting for ID input...</code>
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function AppId() {
+                var id = document.getElementById("app-id").value;
+                id = id.replace(/\s/g, "");
+                var code = document.getElementsByTagName("code")[0];
+                try{
+                    document.getElementsByClassName("determinate")[0].className = "indeterminate";
+                } catch(e) {}
+                code.innerHTML = "Waiting for API response...";
+                $.getJSON("https://itunes.apple.com/lookup?id=" + id + "&callback=?", function(resp) {
+                    console.log(resp.results);
+                    code.innerHTML = "";
+                    if(resp.results.length === 0) {
+                        code.innerHTML = "No valid ID was entered...";
+                    }
+                    resp.results.forEach(function(r) {
+                        var publisherName = r.artistName
+                         , appName = r.trackName
+                         , appId = r.trackId
+                         , bundleId = r.bundleId
+                         , genre = r.primaryGenreName;
+                        var output = `Publisher Name: \"${publisherName}\"
+                        App Name: \"${appName}\"
+                        App ID: \"${appId}\"
+                        Bundle ID: \"${bundleId}\"
+                        Genre: \"${genre}\"
+
+                        `;
+                        code.innerHTML += output;
+                    });
+                    document.getElementsByClassName("indeterminate")[0].className = "determinate";
+                    document.getElementsByClassName("determinate")[0].style.width = "100%";
+                });
+            }
+        </script>
+    </body>
+</html>
