@@ -1,3 +1,15 @@
+p {
+    margin-bottom: 12px !important;
+}
+
+.card-title{
+    margin-bottom: 24px !important;
+}
+
+.card-content{
+    height: 200px;
+}
+
 .vl {
     border-left: 2px solid #26a69a;
     height: 225px;
