@@ -15,59 +15,49 @@
                 <a href="index.html" class="brand-logo" style="margin-left: 10px;">Tom's Toolbox</a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="index.html">...</a></li>
-                    <li class="active"><a href="list.html">List validator</a></li>
-                    <li><a href="converter.html">App ID converter</a></li>
+                    <li class="active"><a href="list.html">List Fixer</a></li>
+                    <li><a href="converter.html">App ID Converter</a></li>
                 </ul>
             </div>
         </nav>
 
         <div class="container">
-            <h1>Test</h1>
+            <h1>Targeting list fixer</h1>
+            <p>If you recieve a targeting list and can't upload it to the DSP, this tool will try to fix common issues with the file.</p>  
+            <p>Specifically this tool will remove hidden charchters, correct line-endings and validate the IDFA is valid.</p>
+            <br>
             <div class="row">
                 <div class="col s8">
-                    <input type="file" id="input" onchange="validateFiles(this.files)">
-                </div>
-                <br>
-                <button type="button" id="fixFiles" onclick="fixFiles()" disabled="true">Fix!</button>   
+                    <label for="input">Upload file(s):</label>
+                    <input type="file" id="input" style="color: white;" onchange="fixFiles(this.files)" accept="text/csv" multiple>  
+                </div>                 
             </div>
         </div>
-
-        <script>
-            function validateFiles(files) {
+        <script>     
+            function fixFiles(files) {
                 const numFiles = files.length;
-                console.log(numFiles + " file(s) uploaded sucsessfully.")
-                var errors = 0;
-                for (let i = 0, numFiles = files.length; i < numFiles; i++) {
-                    if (files[i].type != "text/csv") {
-                        M.toast({html: `File ${i + 1} is not a CSV, please check and re-upload the file as a CSV!`, displayLength: 10000});
-                        errors ++;
-                    }
-                }
-                if (errors === 0) {
-                    $("#fixFiles").attr("disabled", false);
-                }
-            }
-            
-            function fixFiles() {
-                const files = $("#input")[0].files
-                 , numFiles = files.length;
-                var reader = new FileReader()
-                reader.onload = function(e) {
-                        var content = reader.result;
+                M.toast({html: `${numFiles} file(s) sucsessfully uploaded`, displayLength: 10000});
+                var name = ""
+                 , reader = [];
+                for (let i = 0, numFiles = files.length; i < numFiles; i++) {                    
+                    console.log(`Processing file: ${files[i].name}`);
+                    name = files[i].name.replace(".csv", "");
+                    reader.push(new FileReader());
+                    reader[i].onload = function(e) {
+                        var content = reader[i].result;
                         content = JSON.stringify(content);
                         content = content.replace(/(?:\\[rn])+/g, "\n");
+                        // Add REGEX validation
                         content = content.replace(/"/g, "");
-                        console.log(content);
-                        var element = document.createElement('a');
-                        element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(content));
-                        element.setAttribute('download', "fixed_file.csv");
-                        element.style.display = 'none';
-                        document.body.appendChild(element);
-                        element.click();
-                        document.body.removeChild(element);
-                }
-                for (let i = 0, numFiles = files.length; i < numFiles; i++) {
-                    reader.readAsText(files[i]);
+                        var el = document.createElement("a");
+                        el.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(content));
+                        el.style.display = "none";
+                        document.body.appendChild(el);
+                        el.setAttribute('download', `${name}_fixed.csv`); // Name doesn't update properly, always has the name of the first file processed
+                        el.click();
+                        document.body.removeChild(el);
+                    }
+                    reader[i].readAsText(files[i]);                
                 }
             }
         </script>
