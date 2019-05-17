@@ -1,3 +1,11 @@
+.card-content {
+    height: 200px;
+}
+
+.card-title {
+    margin-bottom: 24px !important;
+}
+
 .container {
     width: 90% !important; 
     margin-top: 20px !important;
@@ -5,16 +13,23 @@
     max-width: 86% !important;
 }
 
+div button {
+    float: right;
+}
+
+.drop-zone {
+    border: dashed 2px #26a69a;
+    background: #e0f2f1;
+    height: 150px;
+}
+
+.drop-zone p {
+    text-align: center;
+    margin-top: 45px;
+}
+
 p {
     margin-bottom: 12px !important;
-}
-
-.card-title{
-    margin-bottom: 24px !important;
-}
-
-.card-content{
-    height: 200px;
 }
 
 .vl {
