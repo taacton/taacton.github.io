@@ -33,31 +33,32 @@
                 </div>                 
             </div>
         </div>
-        <script>     
+        <script>
             function fixFiles(files) {
                 const numFiles = files.length;
                 M.toast({html: `${numFiles} file(s) sucsessfully uploaded`, displayLength: 10000});
-                var name = ""
-                 , reader = [];
-                for (let i = 0, numFiles = files.length; i < numFiles; i++) {                    
+                for (var i = 0; i < numFiles; i++) {                    
                     console.log(`Processing file: ${files[i].name}`);
-                    name = files[i].name.replace(".csv", "");
-                    reader.push(new FileReader());
-                    reader[i].onload = function(e) {
-                        var content = reader[i].result;
-                        content = JSON.stringify(content);
-                        content = content.replace(/(?:\\[rn])+/g, "\n");
-                        // Add REGEX validation
-                        content = content.replace(/"/g, "");
-                        var el = document.createElement("a");
-                        el.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURIComponent(content));
-                        el.style.display = "none";
-                        document.body.appendChild(el);
-                        el.setAttribute('download', `${name}_fixed.csv`); // Name doesn't update properly, always has the name of the first file processed
-                        el.click();
-                        document.body.removeChild(el);
-                    }
-                    reader[i].readAsText(files[i]);                
+                    (function(file) {
+                        let reader = new FileReader();  
+                        reader.onload = function(e) { 
+                            let name = file.name.replace(".csv", "");
+                            let content = reader.result;
+                            content = JSON.stringify(content);                            
+                            content = content.replace(/"/g, "");
+                            content = content.replace(/(?:\\[rn])+/g, "\n");
+                            // Add REGEX validation
+                            let blob = new Blob([content], {type : "application/csv;charset=utf-8;"}); // Blob allows for files > 1MB
+                            let link = document.createElement("a"); 
+                            link.href = URL.createObjectURL(blob);
+                            link.style = "visibility:hidden";
+                            link.download = name + "_fixed.csv";
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                        reader.readAsText(file);       
+                    })(files[i]);         
                 }
             }
         </script>
