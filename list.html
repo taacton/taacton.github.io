@@ -23,35 +23,53 @@
 
         <div class="container">
             <h1>Targeting list fixer</h1>
-            <p>If you recieve a targeting list and can't upload it to the DSP, this tool will try to fix common issues with the file.</p>  
-            <p>Specifically this tool will remove hidden charchters, correct line-endings and validate the IDFA is valid.</p>
-            <br>
             <div class="row">
                 <div class="col s8">
-                    <label for="input">Upload file(s):</label>
-                    <input type="file" id="input" style="color: white;" onchange="fixFiles(this.files)" accept="text/csv" multiple>  
-                </div>                 
+                <p>If you recieve a targeting list and can't upload it to the DSP, this tool will try to fix common issues with the file. Specifically this tool will remove hidden charchters, correct line-endings and check the IDFA is valid (non-valid IDs will be removed).</p>  
+                <p>Once you select the file(s) they will automatically begin processing, and download once ready.</p>
+                <br>
+                <div class="row">
+                    <div class="col s8">
+                        <label for="input">Upload file(s):</label>
+                        <input type="file" id="input" style="color: white;" onchange="fixFiles(this.files)" accept="text/csv" multiple>                 
+                
+                    </div>
+                </div>
             </div>
         </div>
         <script>
+            function validateIdfas(content, name) {
+                const regexp = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/gi;
+                var invalidIds = 0
+                 , validatedContent = "";
+                idfas = content.split("\n");
+                idfas.forEach(function(idfa) {
+                    idfa.match(regexp) ? validatedContent += idfa + "\n" : invalidIds++;
+                });
+                if (invalidIds > 0) {
+                    M.toast({html: `Removed ${invalidIds} invalid ID(s) from: ${name}.csv`, displayLength: 10000});
+                }
+                return validatedContent
+            }
+
             function fixFiles(files) {
                 const numFiles = files.length;
                 M.toast({html: `${numFiles} file(s) sucsessfully uploaded`, displayLength: 10000});
-                for (var i = 0; i < numFiles; i++) {                    
-                    console.log(`Processing file: ${files[i].name}`);
+                for (let i = 0; i < numFiles; i++) {                  
                     (function(file) {
                         let reader = new FileReader();  
                         reader.onload = function(e) { 
-                            let name = file.name.replace(".csv", "");
-                            let content = reader.result;
+                            let name = file.name.replace(".csv", "")
+                             , content = reader.result;
+                            M.toast({html: `Processing file: ${name}`, displayLength: 10000});
                             content = JSON.stringify(content);                            
-                            content = content.replace(/"/g, "");
-                            content = content.replace(/(?:\\[rn])+/g, "\n");
-                            // Add REGEX validation
-                            let blob = new Blob([content], {type : "application/csv;charset=utf-8;"}); // Blob allows for files > 1MB
-                            let link = document.createElement("a"); 
+                            content = content.replace(/"/g, ""); // Removes quotes introduced with JSON.stringify()
+                            content = content.replace(/(?:\\[rn])+/g, "\n"); // Converts to unix like line endings
+                            content = validateIdfas(content, name); // Remove non-valid IDFAs
+                            let blob = new Blob([content], {type : "application/csv;charset=utf-8;"}) // Blob allows for files > 1MB
+                             , link = document.createElement("a"); 
                             link.href = URL.createObjectURL(blob);
-                            link.style = "visibility:hidden";
+                            link.style = "visibility: hidden";
                             link.download = name + "_fixed.csv";
                             document.body.appendChild(link);
                             link.click();
