@@ -39,13 +39,25 @@
                         </label>
                     </div> 
                     <div class="row">
-                        <div id="id-wrapper" class="input-field col s10">
+                        <div id="app-id-wrapper" class="input-field col s10">
                             <i class="material-icons prefix">dialpad</i>
                             <input id="app-id" type="text" pattern="^[0-9 _ ,]*$" class="validate">
                             <label for="app-id">App ID(s)</label>
-                            <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid Input"></span>
+                            <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid input"></span>
                             <br>
-                            <button class="btn waves-effect waves-light" onclick="AppId()">Submit
+                            <button class="btn waves-effect waves-light" onclick="appId();">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="bundle-id-wrapper" class="input-field col s10">
+                            <i class="material-icons prefix">text_format</i>
+                            <input id="bundle-id" type="text" class="validate">
+                            <label for="bundle-id">Bundle ID(s)</label>
+                            <span class="helper-text" data-error="Invalid input" data-success="Valid input"></span>
+                            <br>
+                            <button class="btn waves-effect waves-light" onclick="bundleId();">Submit
                                 <i class="material-icons right">send</i>
                             </button>
                         </div>
@@ -63,5 +75,6 @@
             </div>
         </div>
         <script type="text/javascript" src="js/appId.js"></script>
+        <script type="text/javascript" src="js/bundleId.js"></script>
     </body>
 </html>
