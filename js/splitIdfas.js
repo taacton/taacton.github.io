@@ -4,6 +4,9 @@ function splitIdfas(content, name) {
     , iosCount = 0
     , androidContent = ""
     , androidCount = 0;
+    if (JSON.stringify(idfas[idfas.length - 1]) == '""') {
+        idfas.pop(); // Removes the empty index at the end of the array
+    }
     idfas.forEach(function(idfa) {
         if (idfa == idfa.toUpperCase()) { // iOS
             iosContent += idfa + "\n";
@@ -15,9 +18,9 @@ function splitIdfas(content, name) {
     });
     M.toast({html: `Splitting ${iosCount} iOS ID(s) and ${androidCount} ID(s) from: ${name}.csv`, displayLength: 10000});
     if (iosCount > 0) {
-        download(iosContent, "_ios" + name);
+        download(iosContent, name + "_ios");
     } 
     if (androidCount > 0){
-        download(androidContent, "_android" + name);
+        download(androidContent, name + "_android");
     } 
 }
