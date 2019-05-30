@@ -1,8 +1,8 @@
 function validateIdfas(content, name) {
     const regexp = /^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/gi;
     var invalidIds = 0
-     , validatedContent = "";
-    idfas = content.split("\n");
+     , validatedContent = ""
+     , idfas = content.split("\n");
     idfas.forEach(function(idfa) {
         idfa.match(regexp) ? validatedContent += idfa + "\n" : invalidIds++;
     });

@@ -11,15 +11,14 @@ function fixFiles(files) {
                 content = JSON.stringify(content);                            
                 content = content.replace(/"/g, ""); // Removes quotes introduced with JSON.stringify()
                 content = content.replace(/(?:\\[rn])+/g, "\n"); // Converts to unix like line endings
-                content = validateIdfas(content, name); // Remove non-valid IDFAs
-                let blob = new Blob([content], {type : "application/csv;charset=utf-8;"}) // Blob allows for files > 1MB
-                 , link = document.createElement("a"); 
-                link.href = URL.createObjectURL(blob);
-                link.style = "visibility: hidden";
-                link.download = name + "_fixed.csv";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+                if(document.getElementById('box2').checked) {
+                    content = validateIdfas(content, name); // Remove non-valid IDFAs
+                }
+                if(document.getElementById('box3').checked) {
+                    splitIdfas(content, name) // Split list by OS
+                } else {
+                    download(content, name);
+                }
             }
             reader.readAsText(file);       
         })(files[i]);         
