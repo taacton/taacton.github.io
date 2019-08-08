@@ -12,11 +12,11 @@ function splitIdfas(content, name) {
             iosContent += idfa + "\n";
             iosCount++;
         } else if (idfa == idfa.toLowerCase()) { // Android
-            androidContent + "\n"
+            androidContent += idfa + "\n"
             androidCount++;
         }
     });
-    M.toast({html: `Splitting ${iosCount} iOS ID(s) and ${androidCount} ID(s) from: ${name}.csv`, displayLength: 10000});
+    M.toast({html: `Splitting ${iosCount} iOS ID(s) and ${androidCount} Android ID(s) from: ${name}.csv`, displayLength: 10000});
     if (iosCount > 0) {
         download(iosContent, name + "_ios");
     } 
