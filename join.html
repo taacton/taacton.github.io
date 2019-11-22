@@ -15,51 +15,29 @@
                 <a href="index.html" class="brand-logo" style="margin-left: 10px;">Tom's Toolbox</a>
                 <ul class="right hide-on-med-and-down">
                     <li><a href="index.html">...</a></li>
-                    <li<a href="join.html">CSV Joiner</a></li>
-                    <li class="active"><a href="list.html">List Fixer</a></li>
+                    <li class="active"><a href="join.html">CSV Joiner</a></li>
+                    <li><a href="list.html">List Fixer</a></li>
                     <li><a href="converter.html">App ID Converter</a></li>
                 </ul>
             </div>
         </nav>
 
         <div class="container">
-            <h1>Targeting list fixer</h1>
+            <h1>CSV Joiner</h1>
             <div class="row">
                 <div class="col s8">
-                <p>If you recieve a targeting list and can't upload it to the DSP, this tool will try to fix common issues with the file. You can use the options below to customise exactly what actions will be performed on the file(s) you upload.</p>  
+                <p>Quickly merge multiple CSV files into one.</p>  
                 <p>Once you select the file(s) they will automatically begin processing, and download once ready.</p>
                 <br>
                 <div class="row">
                     <div class="col s8">
-                        Actions:
-                        <br>
-                        <label>
-                            <input id="box1" type="checkbox" checked="checked" disabled="disabled">
-                            <span>Fix line-endings</span>
-                        </label>
-                        <br>
-                        <label>
-                            <input id="box2" type="checkbox" checked="checked">
-                            <span>Remove invalid IDs</span>
-                        </label>
-                        <br>
-                        <label>
-                            <input id="box3" type="checkbox">
-                            <span>Split list by OS</span>
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s8">
                         <label for="input">Upload file(s):</label>
-                        <input type="file" id="input" style="color: white;" onchange="fixFiles(this.files)" accept="text/csv" multiple>                 
+                        <input type="file" id="input" style="color: white;" onchange="joinFiles(this.files)" accept="text/csv" multiple>                 
                     </div>
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="js/splitIdfas.js"></script>
-        <script type="text/javascript" src="js/validateIdfas.js"></script>
+        <script type="text/javascript" src="js/joinFiles.js"></script>
         <script type="text/javascript" src="js/download.js"></script>
-        <script type="text/javascript" src="js/fixFiles.js"></script>
     </body>
 </html>

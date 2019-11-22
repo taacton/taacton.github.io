@@ -3,7 +3,7 @@ function download(content, name) {
      , link = document.createElement("a"); 
     link.href = URL.createObjectURL(blob);
     link.style = "visibility: hidden";
-    link.download = name + "_fixed.csv";
+    link.download = name + ".csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
