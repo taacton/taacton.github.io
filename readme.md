@@ -1,5 +1,4 @@
 # Toolbox
-
 This toolbox is designed to contain all apps built to help the Account Managers. It will be added to periodically as the need arrises.
 
 ## App ID converter:
@@ -10,3 +9,6 @@ Used to help AMs fix common issues with the targeting lists they are provided, w
 
 - Outputs the correct unix style line-ending.
 - Validates each IDFA in the file, removing bad ones.
+
+## CSV Joienr: 
+Used to merge multiple CSV files together.
