@@ -18,9 +18,9 @@ function splitIdfas(content, name) {
     });
     M.toast({html: `Splitting ${iosCount} iOS ID(s) and ${androidCount} Android ID(s) from: ${name}.csv`, displayLength: 10000});
     if (iosCount > 0) {
-        download(iosContent, name + "_ios");
+        download(iosContent, name + "_fixed_ios");
     } 
     if (androidCount > 0){
-        download(androidContent, name + "_android");
+        download(androidContent, name + "_fixed_android");
     } 
 }

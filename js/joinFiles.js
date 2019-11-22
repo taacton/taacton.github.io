@@ -1,6 +1,7 @@
-function fixFiles(files) {
+function joinFiles(files) {
     const numFiles = files.length;
     M.toast({html: `${numFiles} file(s) sucsessfully uploaded`, displayLength: 10000});
+    var fullList = "";
     for (let i = 0; i < numFiles; i++) {                  
         (function(file) {
             let reader = new FileReader();  
@@ -11,16 +12,12 @@ function fixFiles(files) {
                 content = JSON.stringify(content);                            
                 content = content.replace(/"/g, ""); // Removes quotes introduced with JSON.stringify()
                 content = content.replace(/(?:\\[rn])+/g, "\n"); // Converts to unix like line endings
-                if(document.getElementById('box2').checked) {
-                    content = validateIdfas(content, name); // Remove non-valid IDFAs
-                }
-                if(document.getElementById('box3').checked) {
-                    splitIdfas(content, name) // Split list by OS
-                } else {
-                    download(content, name + "_fixed");
-                }
+                fullList += content + "\n";
+                if (i == numFiles -1) {
+                    download(fullList, "combined_list");
+                }    
             }
-            reader.readAsText(file);       
-        })(files[i]);         
+            reader.readAsText(file); 
+        })(files[i]);     
     }
 }
