@@ -10,5 +10,5 @@ Used to help AMs fix common issues with the targeting lists they are provided, w
 - Outputs the correct unix style line-ending.
 - Validates each IDFA in the file, removing bad ones.
 
-## CSV Joienr: 
+## CSV Joiner: 
 Used to merge multiple CSV files together.
