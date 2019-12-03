@@ -46,6 +46,9 @@
                             <label for="app-id">App ID(s)</label>
                             <span class="helper-text" data-error="Input must only contain numbers" data-success="Valid input"></span>
                             <br>
+                            <button id="copyButton" class="btn waves-effect waves-light" style="margin-left: 10px;" onclick="copy();" disabled>
+                                <i class="material-icons right" style="text-align: center; margin: 0px;">content_copy</i>
+                            </button>
                             <button class="btn waves-effect waves-light" onclick="appId();">Submit
                                 <i class="material-icons right">send</i>
                             </button>
@@ -75,6 +78,7 @@
                 </div>
             </div>
         </div>
+        <textarea id="copy" style="display: none;">No valid ID was entered...></textarea>
         <script type="text/javascript" src="js/appId.js"></script>
         <script type="text/javascript" src="js/bundleId.js"></script>
     </body>
