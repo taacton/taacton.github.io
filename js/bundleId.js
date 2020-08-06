@@ -17,12 +17,14 @@ function bundleId() {
              , appName = r.trackName
              , appId = r.trackId
              , bundleId = r.bundleId
-             , genre = r.primaryGenreName;
+             , genre = r.primaryGenreName
+             , image = r.artworkUrl60;
             var output = `Publisher Name: \"${publisherName}\"
             App Name: \"${appName}\"
             App ID: \"${appId}\"
             Bundle ID: \"${bundleId}\"
             Genre: \"${genre}\"
+            App Image URL: \"${image}\"
 
             `;
             code.innerHTML += output;
